@@ -17,7 +17,7 @@ import kotlin.reflect.KClass
 
 object AutoTool : ClientModInitializer, ModInitializer {
 
-	public var debugMode = false
+	private var debugMode = false
 	override fun onInitialize() {
 		AttackBlockCallback.EVENT.register(AttackBlockCallback { player, world, _, pos, _ ->
 			val state = world.getBlockState(pos)
