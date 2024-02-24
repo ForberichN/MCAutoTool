@@ -6,7 +6,6 @@ import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback
 import net.minecraft.block.Block
-import net.minecraft.block.Blocks
 import net.minecraft.block.Material
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.*
@@ -27,12 +26,12 @@ object AutoTool : ClientModInitializer, ModInitializer {
 				player.sendMessage(LiteralText("").append(state.block.name).append(" -> ").append(tool.simpleName).formatted(Formatting.GREEN), false)
 
 			if (!isItemOfType(player.inventory.getStack(player.inventory.selectedSlot).item, tool)) {
-				val bestAxe = findHighestValueItem(player, tool)
-				if (bestAxe != -1) {
-					if (bestAxe <= 9){
-						player.inventory.selectedSlot = bestAxe
+				val bestAvailableTool = findHighestValueItem(player, tool)
+				if (bestAvailableTool != -1) {
+					if (bestAvailableTool <= 9){
+						player.inventory.selectedSlot = bestAvailableTool
 					} else {
-						switchItems(player, bestAxe, player.inventory.selectedSlot)
+						switchItems(player, bestAvailableTool, player.inventory.selectedSlot)
 					}
 				}
 			}
