@@ -1,10 +1,12 @@
 package net.forberich.autotool
 
+import net.fabricmc.api.ClientModInitializer
 import net.fabricmc.api.ModInitializer
 import net.fabricmc.fabric.api.client.command.v1.ClientCommandManager
 import net.fabricmc.fabric.api.event.player.AttackBlockCallback
 import net.fabricmc.fabric.api.event.player.AttackEntityCallback
 import net.minecraft.block.Block
+import net.minecraft.block.Blocks
 import net.minecraft.block.Material
 import net.minecraft.entity.player.PlayerEntity
 import net.minecraft.item.*
@@ -14,9 +16,9 @@ import net.minecraft.util.Formatting
 import kotlin.reflect.KClass
 
 
-object AutoTool : ModInitializer {
+object AutoTool : ClientModInitializer, ModInitializer {
 
-	private var debugMode = false
+	public var debugMode = false
 	override fun onInitialize() {
 		AttackBlockCallback.EVENT.register(AttackBlockCallback { player, world, _, pos, _ ->
 			val state = world.getBlockState(pos)
@@ -40,6 +42,9 @@ object AutoTool : ModInitializer {
 		AttackEntityCallback.EVENT.register(AttackEntityCallback { player, _, _, _, _ ->
 			if (!isItemOfType(player.inventory.getStack(player.inventory.selectedSlot).item, SwordItem::class)){
 				val bestSword = findHighestValueItem(player, SwordItem::class)
+
+				if (bestSword == -1) return@AttackEntityCallback ActionResult.PASS
+
 				if (bestSword <= 9){
 					player.inventory.selectedSlot = bestSword
 				} else {
@@ -48,7 +53,9 @@ object AutoTool : ModInitializer {
 			}
 			ActionResult.PASS
 		})
+	}
 
+	override fun onInitializeClient() {
 		ClientCommandManager.DISPATCHER.register(ClientCommandManager.literal("autotool_debug").executes { _ ->
 			debugMode = !debugMode
 			1
@@ -92,7 +99,7 @@ object AutoTool : ModInitializer {
 		return when (material) {
 			Material.WOOD -> AxeItem::class
 			Material.STONE, Material.METAL -> PickaxeItem::class
-			Material.SOIL, Material.PLANT, Material.SOLID_ORGANIC, Material.SNOW_BLOCK, Material.SNOW_LAYER -> ShovelItem::class
+			Material.SOIL, Material.PLANT, Material.SOLID_ORGANIC, Material.SNOW_BLOCK, Material.SNOW_LAYER, Material.AGGREGATE -> ShovelItem::class
 			else -> null
 		}
 	}
