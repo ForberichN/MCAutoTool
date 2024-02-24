@@ -1,0 +1,36 @@
+{
+	"schemaVersion": 1,
+	"id": "auto-tool",
+	"version": "${version}",
+	"name": "AutoTool",
+	"description": "This is an example description! Tell everyone what your mod is about!",
+	"authors": [
+		"Me!"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "CC0-1.0",
+	"icon": "assets/auto-tool/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "net.forberich.autotool.AutoTool",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [ ],
+	"depends": {
+		"fabricloader": ">=0.15.7",
+		"minecraft": "~1.16.4",
+		"java": ">=8",
+		"fabric": "*",
+		"fabric-language-kotlin": ">=1.9.22"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
